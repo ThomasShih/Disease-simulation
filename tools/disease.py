@@ -11,12 +11,12 @@ def getDistance(person1,person2):
                 ((person2.y_coord-person1.y_coord)**2))
 
 class disease:
-    def __init__(self,name="disease"):
-        self.incubation         = 4  #How long does a virus incubate before being symptomatic
-        self.symptomatic        = 4  #How long is someone able to have symptoms
-        self.infectious         = 6  #How long is someone able to infect others
-        self.mortality          =.02 #How likely is someone to die
-        self.reproductionValue  = 1 #How likely the disease is to spread between people at a distance of one meter for one time unit
+    def __init__(self,attributes):
+        self.incubation         = attributes.disease["incubation"]
+        self.symptomatic        = attributes.disease["symptomatic"]
+        self.infectious         = attributes.disease["infectious"]
+        self.mortality          = attributes.disease["mortality"]
+        self.reproductionValue  = attributes.disease["reproductionValue"]
     
     def infectionProbability(self,distance,infecterModifier,infecteeModifier):
         """based on the assumption that the chance for transmission depends on how close they are and how careful each party is against transmission"""
