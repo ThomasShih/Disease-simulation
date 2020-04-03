@@ -12,9 +12,8 @@ def getDistance(person1,person2):
 
 class disease:
     def __init__(self,attributes):
-        self.incubation         = attributes.disease["incubation"]
         self.symptomatic        = attributes.disease["symptomatic"]
-        self.infectious         = attributes.disease["infectious"]
+        self.contagious         = attributes.disease["contagious"]
         self.mortality          = attributes.disease["mortality"]
         self.reproductionValue  = attributes.disease["reproductionValue"]
     
@@ -33,9 +32,18 @@ class disease:
         """for a given individual, the chance that they will be infected depends on how likely others will infect"""
         for _,row in contaigousDataSet[["x_coord","y_coord","pInfectorOffset"]].iterrows():
             if booleanFromProbability(self.infectionProbability(getDistance(individual,row[["x_coord","y_coord"]]),row["pInfectorOffset"],individual["pResistanceOffset"])):
-                individual["status"] = "incubation"
+                individual["status"] = "infected"
+                #reset the status_enlapsed attribute
+                individual["status_enlapsed"] = 0
                 return individual
         return individual
+
+    def getContagiousIndividuals(self,data):
+        """Returns a dataframe of individuals of whom is contagious"""
+        infectedData = data[data.status == "infected"]
+        daysOfInterest = list(filter(lambda item: item[1] == True,list(enumerate(self.contagious))))
+        infectiousDays = list(map(lambda x:x[0],daysOfInterest))
+        return infectedData[infectedData["status_enlapsed"].isin(infectiousDays)]
 
 if __name__ == "__main__":
     import dataSet

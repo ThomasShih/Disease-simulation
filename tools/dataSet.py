@@ -11,13 +11,12 @@ class dataSet:
         except: "data has not yet been generated"
         return
 
-    def __repr__(self):
-        try: return self.data.__str__()
-        except: "data has not yet been generated"
+    def __call__(self):
+        try: return self.data
+        except: print("data has not yet been generated")
         return
 
     def display(self):
-        print(True)
         try: print(self.data)
         except: print("data has not yet been generated")
         return
@@ -36,6 +35,9 @@ class dataSet:
         self.data["status"] = self.data.apply(\
                                         lambda x: "immune" if random.random() <= self.attributes.disease["immunityChance"] else x["status"]\
                                         ,axis=1)
+
+        #make one random individual a patient 0 (just grab the first individual in dataFrame)
+        self.data.at[0,"status"] = "infected"
         return
 
 if __name__ == "__main__":
