@@ -11,8 +11,8 @@ class dataSet:
             "pInfectorOffset"   :np.round(np.linspace(0,2,21),1), #how careful is someone from infecting other if infected?
             "age"               :range(0,80,1),
             "status"            :["uninfected"],
-            "x_coord"           :range(0,10000,1),
-            "y_corrd"           :range(0,10000,1),
+            "x_coord"           :range(0,100,1),
+            "y_coord"           :range(0,100,1),
         } 
         self.populationAttributes = {
             "immunityChance" : 0.05,
