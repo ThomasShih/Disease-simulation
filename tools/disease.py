@@ -17,6 +17,8 @@ class disease:
         self.mortality          = attributes.disease["mortality"]
         self.reproductionValue  = attributes.disease["reproductionValue"]
         self.movementProfile    = attributes.disease["movementProfile"]
+        self.xBoundary          = attributes.simulation["xBoundary"]
+        self.yBoundary          = attributes.simulation["yBoundary"]
         self.angles             = range(360) #I only want this array generated once, hence placing it in init
     
     def infectionProbability(self,distance,infecterModifier,infecteeModifier):
@@ -65,7 +67,18 @@ class disease:
         theta = random.choice(self.angles)*(pi/180)
             #get movement
         moveY , moveX = round(sin(theta)*r) , round(cos(theta)*r)
-        individual["x_coord"],individual["y_coord"] = moveX,moveY
+        individual["x_coord"],individual["y_coord"] = individual["x_coord"] + moveX,individual["y_coord"] + moveY
+            #make sure movement is within boundaries
+        if individual["x_coord"] < self.xBoundary[0]:
+            individual["x_coord"] = self.xBoundary[0]
+        elif individual["x_coord"] > self.xBoundary[1]:
+            individual["x_coord"] = self.xBoundary[1]
+
+        if individual["y_coord"] < self.yBoundary[0]:
+            individual["y_coord"] = self.yBoundary[0]
+        elif individual["y_coord"] > self.yBoundary[1]:
+            individual["y_coord"] = self.yBoundary[1]
+
         return individual
 
 if __name__ == "__main__":

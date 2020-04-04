@@ -1,6 +1,7 @@
 import random
 import pandas as pd
 import numpy as np
+import tools.attributes as attributes
 
 class timeStep:
     def removals(self):
@@ -18,13 +19,13 @@ class timeStep:
     def movement(self):
         """Each cycle should have some given movement amount per individual"""
         
-        if self.attributes.simulation["moveRemoved"] == True:
+        if attributes.simulation["moveRemoved"] == True:
             self.data.data = self.data().apply(self.disease.movement,axis=1)
         else:
-            applicableIndividuals = ~self.data().status.isin(self.attributes.removedCategory)
+            applicableIndividuals = ~self.data().status.isin(attributes.removedCategory)
             self.data.data[applicableIndividuals] = self.data()[applicableIndividuals].apply(self.disease.movement,axis=1)
 
-    def summarize(self,cycleID):
+    def summarizeCycle(self,cycleID):
         """Creates a summary of the current cycle"""
         snapShot = self.data.data["status"].value_counts()\
                        .rename("Day " + str(cycleID))
@@ -36,6 +37,6 @@ class timeStep:
         self.removals() #Infected individuals would either die or recover once they have reached the end of their illness, remove them from being infectious
         self.infectIndividuals() #Calculate which individuals would be infected for this timestep
         self.movement() #People travel around, calculate whom will travel and how far
-        self.summarize(cycleID) #The actual data file will likely be too hard to interperet, therefore make a summary of the file
+        self.summarizeCycle(cycleID) #The actual data file will likely be too hard to interperet, therefore make a summary of the file
         self.data.data["status_enlapsed"] = self.data()["status_enlapsed"] + 1
         return
