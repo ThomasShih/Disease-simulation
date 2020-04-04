@@ -1,4 +1,4 @@
-from math import sqrt
+from math import sqrt, pi, sin, cos
 import random
 
 def booleanFromProbability(probability):
@@ -16,6 +16,8 @@ class disease:
         self.contagious         = attributes.disease["contagious"]
         self.mortality          = attributes.disease["mortality"]
         self.reproductionValue  = attributes.disease["reproductionValue"]
+        self.movementProfile    = attributes.disease["movementProfile"]
+        self.angles             = range(360) #I only want this array generated once, hence placing it in init
     
     def infectionProbability(self,distance,infecterModifier,infecteeModifier):
         """based on the assumption that the chance for transmission depends on how close they are and how careful each party is against transmission"""
@@ -44,6 +46,27 @@ class disease:
         daysOfInterest = list(filter(lambda item: item[1] == True,list(enumerate(self.contagious))))
         infectiousDays = list(map(lambda x:x[0],daysOfInterest))
         return infectedData[infectedData["status_enlapsed"].isin(infectiousDays)]
+
+    def movement(self,individual):
+        """Calculates and moves individuals"""
+
+        #assumes that healthy individuals have a movement profile of infected indivuals at day 1
+        try:
+            R =  self.movementProfile[individual["status_enlapsed"]]\
+                if individual["status"] == "infected"\
+                else self.movementProfile[0]
+        except (IndexError): 
+            R = self.movementProfile[0]
+
+        #move the individual to a random point in circle with radius R
+            #get movement amount
+        r = random.choice(range(R))
+            #get angle of movement
+        theta = random.choice(self.angles)*(pi/180)
+            #get movement
+        moveY , moveX = round(sin(theta)*r) , round(cos(theta)*r)
+        individual["x_coord"],individual["y_coord"] = moveX,moveY
+        return individual
 
 if __name__ == "__main__":
     import dataSet
