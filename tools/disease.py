@@ -81,6 +81,15 @@ class disease:
 
         return individual
 
+    def remove(self,individual):
+        """calculates if individual should die or recover"""
+
+        if booleanFromProbability(self.mortality):
+            individual.status = "deceased"
+        else: individual.status = "recovered"
+
+        return individual
+ 
 if __name__ == "__main__":
     import dataSet
 

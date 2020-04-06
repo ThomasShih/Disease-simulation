@@ -5,7 +5,14 @@ import tools.attributes as attributes
 
 class timeStep:
     def removals(self):
-        pass
+        """After being infected for a certain period of time, the individuals are removed"""
+
+        status_enlapsed_finished = len(attributes.disease["contagious"])
+        applicableIndividuals = (self.data().status == "infected") &\
+                                (self.data().status_enlapsed >= status_enlapsed_finished)
+
+        self.data.data[applicableIndividuals] = self.data().apply(self.disease.remove,axis = 1)
+        return
 
     def infectIndividuals(self):
         """Calculate which individuals should be infected this cycle"""

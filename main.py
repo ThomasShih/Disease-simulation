@@ -24,15 +24,13 @@ class simulation(timeStep):
 
     def summarizeSimulation(self):
         #print summary
-        self.summary["newlyInfected"] = (self.summary["infected"] - self.summary["infected"].shift(fill_value=0)).astype(int)
+        self.summary["infectedChange"] = self.summary["infected"] - self.summary["infected"].shift(fill_value=0)
+        self.summary = self.summary.fillna(0).astype(int,errors="ignore")
         print(self.summary)
 
 
 if __name__ == "__main__":
     sim = simulation()
-
     sim.initialize()
-
     sim.start()
-
     sim.summarizeSimulation()
