@@ -19,8 +19,18 @@ class timeStep:
 
         contaigousDataSet = self.disease.getContagiousIndividuals(self.data())
         suspectibleIndividuals = self.data().status == "susceptible"
+
+        if(attributes.simulation["simplification"]>0):
+            #build infection landscape
+            contaigousDataSet = self.getLandscape(contaigousDataSet)
+            self.distanceCutoff()
+
+        #calculate the infection chance
         self.data.data[suspectibleIndividuals] = self.data()[suspectibleIndividuals]\
-                                                .apply(lambda x: self.disease.chanceToBeInfected(x,contaigousDataSet=contaigousDataSet),axis=1)
+                                                .apply(lambda x: self.disease.chanceToBeInfected(x\
+                                                                                                ,contaigousDataSet=contaigousDataSet\
+                                                                                                ,distanceCutoff=attributes.simulation["distanceCutoff"]),axis=1)
+
         return
 
     def movement(self):

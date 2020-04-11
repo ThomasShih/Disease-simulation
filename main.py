@@ -1,11 +1,12 @@
 from tools.dataSet import dataSet
 from tools.disease import disease
 from tools.cycleStep import timeStep
+from tools.modelling import modelling
 import tools.attributes as attributes
 import pandas as pd
 from tqdm import tqdm
 
-class simulation(timeStep):
+class simulation(timeStep,modelling):
     def __init__(self):
         #import required resources
         self.disease = disease(attributes)
@@ -34,3 +35,5 @@ if __name__ == "__main__":
     sim.initialize()
     sim.start()
     sim.summarizeSimulation()
+
+    sim.summary.to_csv("data/run.csv")
